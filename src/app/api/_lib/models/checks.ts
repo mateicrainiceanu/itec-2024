@@ -25,8 +25,12 @@ class Check {
 
         return (db.execute(sql));
     }
-    static getForEndpoint(id: number) {
-        let sql = `SELECT * FROM checks WHERE endpointId = ${id} ORDER BY id DESC;`
+    static getForEndpoint(id: number, faults: boolean, date: string) {
+        let sql = `SELECT * FROM checks 
+        WHERE endpointId = ${id} 
+        ${(faults ? "AND status != 0" : "")} 
+        AND DATE(date) = '${date}' 
+        ORDER BY id DESC;`
         return db.execute(sql)
     }
 }

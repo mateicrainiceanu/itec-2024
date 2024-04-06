@@ -1,4 +1,5 @@
 "use client";
+import moment from "moment";
 import axios from "axios";
 import React, {useEffect, useState} from "react";
 import StatusIndicator from "@/app/_elements/StatusIndicator";
@@ -6,13 +7,17 @@ import StatusIndicator from "@/app/_elements/StatusIndicator";
 function EndPointInfo({params}: {params: {endptid: string}}) {
 	const [checks, setChecks] = useState([]);
 
+	const [showFaulty, setShowFaulty] = useState(false);
+
+	const [date, setDate] = useState(new Date(Date.now()).toISOString().slice(0, 10));
+
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [showFaulty]);
 
 	function getData() {
 		axios
-			.get("/api/endpoint/" + params.endptid)
+			.post("/api/endpoint/" + params.endptid, {faults: showFaulty, date: date})
 			.then((response) => {
 				setChecks(response.data);
 			})
@@ -21,15 +26,34 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 			});
 	}
 
+	function showOnlyFault() {
+		setShowFaulty((prevData) => !prevData);
+	}
+
 	return (
 		<div className="max-width-xl mx-auto">
 			<div className="flex">
-				<button className="rounded-lg m-3 p-2 bg-blue-800 hover:bg-blue-600" onClick={() => {}}>
-					Show faults
+				<button
+					className={
+						"rounded-lg m-3 p-2 " +
+						(showFaulty ? "bg-gray-800 hover:bg-black-gray" : "bg-green-800 hover:bg-green-gray")
+					}
+					onClick={showOnlyFault}>
+					Show only faults
 				</button>
 				<div className="ms-auto">
-					<input type="date" className="rounded-lg m-3 p-2" />
-					<button className="rounded-lg m-3 p-2 bg-blue-800 hover:bg-blue-600">Go To Date</button>
+					<input
+						type="date"
+						className="rounded-lg m-3 p-2 bg-gray-500"
+						name="date"
+						value={date}
+						onChange={(e: any) => {
+							setDate(e.target.value);
+						}}
+					/>
+					<button className="rounded-lg m-3 p-2 bg-blue-800 hover:bg-blue-600" onClick={getData}>
+						Go To Date
+					</button>
 				</div>
 			</div>
 

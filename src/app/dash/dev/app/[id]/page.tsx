@@ -4,14 +4,19 @@ import Endpoint from "@/app/api/_lib/models/endpoint";
 import {LoadingContext} from "@/app/LoadingContext";
 import axios from "axios";
 import Link from "next/link";
-import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import {BsFillArrowRightCircleFill} from "react-icons/bs";
 import React, {useContext, useEffect, useState} from "react";
+import EndpointAdd from "./EndpointAdd";
 
 function AppDetailedView({params}: {params: {id: string}}) {
 	const [appData, setAppData] = useState({name: "", homepage: "", status: "", description: "", endpoints: []});
 	const setLoading = useContext(LoadingContext);
 
 	useEffect(() => {
+		getData();
+	}, []);
+
+	function getData() {
 		setLoading(true);
 		axios
 			.get("/api/apps/" + params.id)
@@ -23,7 +28,7 @@ function AppDetailedView({params}: {params: {id: string}}) {
 				alert("an error occured");
 				window.location.replace("/dash");
 			});
-	}, []);
+	}
 
 	return (
 		<div className="max-w-xl mx-auto">
@@ -32,6 +37,9 @@ function AppDetailedView({params}: {params: {id: string}}) {
 			<p className="font-mono my-1">Homepage: {appData.homepage}</p>
 			<p className="font-mono my-1">Description: {appData.description}</p>
 			<p className="font-mono my-1">Status: {appData.status}</p>
+
+			<EndpointAdd appId={Number(params.id)} getData={getData}></EndpointAdd>
+
 			<table className="w-full text-center">
 				<thead className="bg-gray-800 font-bold h-10">
 					<tr>
