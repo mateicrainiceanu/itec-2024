@@ -29,6 +29,10 @@ class Endpoint {
         let sql = `SELECT * FROM endpoints WHERE appId = ${id};`
         return db.execute(sql)
     }
+    static delete(id: number) {
+        let sql = `DELETE FROM endpoints WHERE id = ${id};`
+        return db.execute(sql)
+    }
 }
 
 export default Endpoint;

@@ -7,17 +7,20 @@ import Link from "next/link";
 import {BsFillArrowRightCircleFill} from "react-icons/bs";
 import React, {useContext, useEffect, useState} from "react";
 import EndpointAdd from "./EndpointAdd";
+import {UserContext} from "@/app/UserContext";
 
 function AppDetailedView({params}: {params: {id: string}}) {
 	const [appData, setAppData] = useState({name: "", homepage: "", status: "", description: "", endpoints: []});
 	const setLoading = useContext(LoadingContext);
+	const {user} = useContext(UserContext);
 
 	useEffect(() => {
-		getData();
-	}, []);
+		setLoading(appData.endpoints.length === 0);
+
+		setTimeout(getData, appData.endpoints.length === 0 ? 0 : user.timeInterval);
+	}, [appData, user.timeInterval]);
 
 	function getData() {
-		setLoading(true);
 		axios
 			.get("/api/apps/" + params.id)
 			.then((response) => {
@@ -36,7 +39,9 @@ function AppDetailedView({params}: {params: {id: string}}) {
 			<p className="font-mono my-1">Name: {appData.name}</p>
 			<p className="font-mono my-1">Homepage: {appData.homepage}</p>
 			<p className="font-mono my-1">Description: {appData.description}</p>
-			<p className="font-mono my-1">Status: {appData.status}</p>
+			<p className="font-mono my-1 flex">
+				Status <StatusIndicator status={Number(appData.status)} />
+			</p>
 
 			<EndpointAdd appId={Number(params.id)} getData={getData}></EndpointAdd>
 
@@ -51,11 +56,13 @@ function AppDetailedView({params}: {params: {id: string}}) {
 					{appData.endpoints.map((endpt: Endpoint) => (
 						<tr key={endpt.id} className="h-10">
 							<td>{endpt.url}</td>
-							<td className="text-center flex">
-								<StatusIndicator status={endpt.status} />
-								<Link href={"/dash/dev/endpoint/" + endpt.id}>
-									<BsFillArrowRightCircleFill className="ms-5" />
-								</Link>
+							<td className="text-center  pt-3">
+								<div className="flex">
+									<StatusIndicator status={endpt.status} />
+									<Link href={"/dash/dev/endpoint/" + endpt.id}>
+										<BsFillArrowRightCircleFill className="ms-5" />
+									</Link>
+								</div>
 							</td>
 						</tr>
 					))}

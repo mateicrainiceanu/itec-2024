@@ -10,6 +10,7 @@ interface IUser {
 	lname: string;
 	email: string;
 	token: string;
+	timeInterval: number;
 }
 
 interface IChildren {
@@ -19,7 +20,7 @@ interface IChildren {
 const UserContext = createContext(null as any);
 
 function UserProvider({children}: IChildren) {
-	const [user, setUser] = useState({id: 0, fname: "", lname: "", email: "", token: "", logged: false});
+	const [user, setUser] = useState({id: 0, fname: "", lname: "", email: "", token: "", timeInterval: 10000, logged: false});
 	const [tried, setTried] = useState(false);
 
 	const setLoading = useContext(LoadingContext);
@@ -29,7 +30,7 @@ function UserProvider({children}: IChildren) {
 
 		await axios
 			.get("/api/user")
-			.then((response) => {
+			.then((response) => {				
 				setUser({...(response as AxiosResponse).data, logged: true});
 				setTried(true);
 			})

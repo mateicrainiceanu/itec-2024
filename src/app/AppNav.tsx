@@ -55,7 +55,7 @@ const Navbar = () => {
 			<div className="flex justify-between items-center w-full h-20 px-4 text-white sticky top-0 my-2 nav ">
 				<div>
 					<Link href="/">
-						<h3 className="">iTec 2024</h3>
+						<h3 className="font-mono text-xl font-bold mx-4">AppStats</h3>
 					</Link>
 				</div>
 

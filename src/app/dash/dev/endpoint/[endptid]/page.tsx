@@ -1,10 +1,15 @@
 "use client";
 import moment from "moment";
 import axios from "axios";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import StatusIndicator from "@/app/_elements/StatusIndicator";
+import {LoadingContext} from "@/app/LoadingContext";
+import {UserContext} from "@/app/UserContext";
 
 function EndPointInfo({params}: {params: {endptid: string}}) {
+	const setLoading = useContext(LoadingContext);
+	const {user} = useContext(UserContext);
+
 	const [checks, setChecks] = useState([]);
 
 	const [showFaulty, setShowFaulty] = useState(false);
@@ -12,8 +17,10 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 	const [date, setDate] = useState(new Date(Date.now()).toISOString().slice(0, 10));
 
 	useEffect(() => {
-		getData();
-	}, [showFaulty]);
+		setLoading(checks.length === 0);
+
+		setTimeout(getData, !checks.length ? 0 : user.timeInterval);
+	}, [checks, user.timeInterval]);
 
 	function getData() {
 		axios
@@ -30,6 +37,17 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 		setShowFaulty((prevData) => !prevData);
 	}
 
+	function deleteEp() {
+		axios
+			.delete("/api/endpoint/" + params.endptid + "/delete")
+			.then((response) => {
+				window.location.replace("/dash");
+			})
+			.catch((error) => {
+				alert("there was an error");
+			});
+	}
+
 	return (
 		<div className="max-width-xl mx-auto">
 			<div className="flex">
@@ -40,6 +58,9 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 					}
 					onClick={showOnlyFault}>
 					Show only faults
+				</button>
+				<button className="rounded-lg m-3 p-2 bg-red-800 hover:bg-red-600" onClick={deleteEp}>
+					Delete Endpoint
 				</button>
 				<div className="ms-auto">
 					<input

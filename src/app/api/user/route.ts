@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     if (token) {
         const user = getUserFromToken(token)
         if (user.id) {
-            let [dbuser] = (await User.findById(user.id))[0] as Array<RowDataPacket>;
+            let [dbuser] = (await User.findById(user.id))[0] as Array<RowDataPacket>;            
             return NextResponse.json({ ...dbuser, hash: "xxx" });
         } else {
             return new NextResponse("UserNotLoggedIn", { status: 403 })
@@ -22,3 +22,4 @@ export async function GET(req: NextRequest) {
         return new NextResponse("UserNotLoggedIn", { status: 403 })
     }
 }
+
