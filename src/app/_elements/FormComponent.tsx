@@ -1,12 +1,8 @@
 import React from "react";
 
-interface formElement {
-    name: string,
-    type: string,
-}
 interface Props {
 	name: string;
-    type: string;
+    type?: string;
     label: string
 	handleChange: (e: any) => void;
 	value: string | number;
@@ -20,7 +16,7 @@ function FormElement({name, type, label, handleChange, value}: Props) {
 				id={name}
 				name={name}
 				value={value}
-				type={type}
+				type={type || "text"}
                 onChange={handleChange}
 				className="w-full my-2 h-8 py-4 px-5 text-black rounded-lg text-center"
 			/>

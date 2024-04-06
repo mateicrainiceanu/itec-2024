@@ -19,5 +19,5 @@ export default function Layout({children}: {children: React.ReactNode}) {
 		//eslint-disable-next-line
 	}, [user, tried]);
 
-	return <>{children}</>;
+	return <div className="p-5">{children}</div>;
 }

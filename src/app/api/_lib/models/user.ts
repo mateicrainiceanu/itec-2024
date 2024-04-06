@@ -57,7 +57,7 @@ class User {
         return db.execute(sql);
     }
 
-    static update(id: number, fieldName: string, newValue: string) {
+    static update(id: number, fieldName: string, newValue: string | number) {
         let sql = `
         UPDATE users SET ${fieldName} = '${newValue}' WHERE id = ${id}; `
         return db.execute(sql);

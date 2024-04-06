@@ -34,7 +34,6 @@ function UserProvider({children}: IChildren) {
 				setTried(true);
 			})
 			.catch((error) => {
-				console.log("here");
 
 				setTried(true);
 
