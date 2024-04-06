@@ -33,6 +33,11 @@ class Check {
         ORDER BY id DESC;`
         return db.execute(sql)
     }
+
+    static getNumInDay(id:number, date: string) {
+        let sql = `SELECT COUNT (date) FROM checks WHERE endpointId = ${id} AND DATE(date) = '${date}';`
+        return db.execute(sql);
+    }
 }
 
 export default Check; 
