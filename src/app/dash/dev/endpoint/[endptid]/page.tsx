@@ -14,31 +14,33 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 	const [checks, setChecks] = useState([]);
 
 	const [showFaulty, setShowFaulty] = useState(false);
-
-	const [lim, setLim] = useState(0);
 	const [counter, setCounter] = useState(100);
 
 	const [date, setDate] = useState(new Date(Date.now()).toISOString().slice(0, 10));
 	const [autoref, setAutoref] = useState(true);
 
 	const [page, setPage] = useState(0);
-	const [totalPages, setTotalPages] = useState(1);
+	const [totalPages, setTotalPages] = useState(0);
 
 	useEffect(() => {
 		setLoading(true);
 	}, []);
 
 	useEffect(() => {
-		setTimeout(getData, !checks.length ? 0 : user.timeInterval);
+		setTimeout(getData, !checks.length ? 1 : user.timeInterval);
 	}, [checks, user.timeInterval, autoref, showFaulty]);
 
 	function getData() {
 		if (autoref) {
 			axios
-				.post("/api/endpoint/" + params.endptid, {faults: showFaulty, date: date, limit: lim, counter: counter})
+				.post("/api/endpoint/" + params.endptid, {faults: showFaulty, date: date})
 				.then((response) => {
 					setChecks(response.data.queryresult);
 					setTotalPages(response.data.count);
+
+					console.log(response.data.queryresult[0]);
+					
+					
 					setTimeout(() => {
 						setLoading(false);
 					}, 1000);
@@ -94,7 +96,7 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 						}}
 						rowsPerPage={counter}
 						onRowsPerPageChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-							setCounter(parseInt(event.target.value, 10));
+							setCounter(Number(event.target.value));
 						}}
 					/>
 				</div>
@@ -139,15 +141,18 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 					</tr>
 				</thead>
 				<tbody>
-					{checks.slice(page * counter, (page + 1) * counter).map((check: any, i) => (
+					{checks.slice(page*counter , (page+1)*(counter)).map((check: any, i) => {
+						
+						return(
+
 						<tr key={i} className="h-10">
 							<td>
 								<StatusIndicator status={check.status}></StatusIndicator>
 							</td>
-							<td>{String(check.date).replace("T", " ").slice(0, 19)}</td>
+							<td>{String(check.date).replace("T", " ").replaceAll("-", ".").slice(0, 19)}</td>
 							<td>{check.code}</td>
 						</tr>
-					))}
+					)})}
 				</tbody>
 			</table>
 		</div>

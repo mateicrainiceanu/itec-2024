@@ -32,7 +32,7 @@ class Check {
         ${(faults ? "AND status != 0" : "")} 
         ${(date ? `AND DATE(date) = '${date}' ` : "")} 
         ORDER BY id DESC
-        ${!date ? "LIMIT 0, 30" : ""}
+        LIMIT 0, 60
         ;`
         return db.execute(sql)
     }

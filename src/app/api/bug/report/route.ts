@@ -4,6 +4,7 @@ import { RowDataPacket } from "mysql2";
 import App from "../../_lib/models/apps";
 import User from "../../_lib/models/user";
 
+
 export async function POST(req: NextRequest) {
     const { title, description, url, reportersEmail, appId } = await req.json()
 
