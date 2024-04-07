@@ -32,7 +32,6 @@ class Check {
         ${(faults ? "AND status != 0" : "")} 
         ${(date ? `AND DATE(date) = '${date}' ` : "")} 
         ORDER BY id DESC
-        LIMIT 0, 60
         ;`
         return db.execute(sql)
     }

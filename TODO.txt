@@ -1,0 +1,1 @@
+For some reason in the endpoint view, the first 60 logs are not shown. Same goes for the chart data, except, there are fewer logs.
