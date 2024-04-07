@@ -1,6 +1,7 @@
 import { db } from "../config/db"
 
 interface App {
+    id?: number,
     ownerId: number,
     name: string,
     description: string,
@@ -46,6 +47,12 @@ class App {
     static getLast() {
         let sql = `SELECT * FROM apps ORDER BY id desc LIMIT 0, 10;`
         return db.execute(sql)
+    }
+
+    static changeStatus(id: number, status: number) {
+        let sql = `
+        UPDATE apps SET status = ${status} WHERE id = ${id};`
+        return db.execute(sql);
     }
 }
 
