@@ -5,6 +5,7 @@ import React, {useContext, useEffect, useState} from "react";
 import StatusIndicator from "@/app/_elements/StatusIndicator";
 import {LoadingContext} from "@/app/LoadingContext";
 import {UserContext} from "@/app/UserContext";
+import Graph from "../../app/[id]/Graph";
 
 function EndPointInfo({params}: {params: {endptid: string}}) {
 	const setLoading = useContext(LoadingContext);
@@ -67,6 +68,7 @@ function EndPointInfo({params}: {params: {endptid: string}}) {
 
 	return (
 		<div className="max-width-xl mx-auto">
+			<Graph data={checks.splice(0,25)}></Graph>
 			<div className="flex flex-wrap">
 				<button
 					className={

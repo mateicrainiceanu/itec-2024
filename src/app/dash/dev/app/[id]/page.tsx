@@ -8,11 +8,13 @@ import {BsFillArrowRightCircleFill} from "react-icons/bs";
 import React, {useContext, useEffect, useState} from "react";
 import EndpointAdd from "./EndpointAdd";
 import {UserContext} from "@/app/UserContext";
+import Graph from "./Graph";
 
 function AppDetailedView({params}: {params: {id: string}}) {
 	const [appData, setAppData] = useState({name: "", homepage: "", status: "", description: "", endpoints: []});
 	const setLoading = useContext(LoadingContext);
 	const {user} = useContext(UserContext);
+	const [showAdd, setShowAdd] = useState(false);
 
 	useEffect(() => {
 		setLoading(appData.endpoints.length === 0);
@@ -43,7 +45,22 @@ function AppDetailedView({params}: {params: {id: string}}) {
 				Status <StatusIndicator status={Number(appData.status)} />
 			</p>
 
-			<EndpointAdd appId={Number(params.id)} getData={getData}></EndpointAdd>
+			{showAdd ? (
+				<EndpointAdd
+					appId={Number(params.id)}
+					getData={getData}
+					close={() => {
+						setShowAdd(false);
+					}}></EndpointAdd>
+			) : (
+				<button
+					className="p-2 rounded-lg w-full bg-gray-800 hover:bg-gray-600 font-mono text-bold text-center my-2"
+					onClick={() => {
+						setShowAdd(true);
+					}}>
+					Add Endpoint
+				</button>
+			)}
 
 			<table className="w-full text-center">
 				<thead className="bg-gray-800 font-bold h-10">

@@ -42,6 +42,11 @@ class App {
         let sql = `SELECT * FROM apps WHERE id = ${id};`
         return db.execute(sql)
     }
+
+    static getLast() {
+        let sql = `SELECT * FROM apps ORDER BY id desc LIMIT 0, 10;`
+        return db.execute(sql)
+    }
 }
 
 export default App;

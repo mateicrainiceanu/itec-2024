@@ -25,16 +25,37 @@ class Check {
 
         return (db.execute(sql));
     }
-    static getForEndpoint(id: number, faults: boolean, date: string) {
+
+    static getForEndpoint(id: number, faults?: boolean, date?: string) {
         let sql = `SELECT * FROM checks 
         WHERE endpointId = ${id} 
         ${(faults ? "AND status != 0" : "")} 
-        AND DATE(date) = '${date}' 
-        ORDER BY id DESC;`
+        ${(date ? `AND DATE(date) = '${date}' ` : "")} 
+        ORDER BY id DESC
+        ${!date ? "LIMIT 0, 30" : ""}
+        ;`
         return db.execute(sql)
     }
 
-    static getNumInDay(id:number, date: string) {
+    static getForIds(idStr: string, epnum: number) {
+        let sql = `SELECT * FROM checks 
+        WHERE endpointId IN (${idStr.slice(0, 3*epnum - 2)}) 
+        ORDER BY id DESC
+        LIMIT 0, ${epnum*20} 
+        ;`
+        return db.execute(sql)
+    }
+
+    static getForEndpt(id: number){
+        let sql = `SELECT * FROM checks 
+        WHERE endpointId = ${id} 
+        ORDER BY id DESC
+        LIMIT 0, 20 
+        ;`
+        return db.execute(sql)
+    }
+
+    static getNumInDay(id: number, date: string) {
         let sql = `SELECT COUNT (date) FROM checks WHERE endpointId = ${id} AND DATE(date) = '${date}';`
         return db.execute(sql);
     }
