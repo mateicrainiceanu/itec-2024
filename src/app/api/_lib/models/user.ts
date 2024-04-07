@@ -69,6 +69,15 @@ class User {
         `
         return db.execute(sql)
     }
+
+    static getForApp(id: number) {
+        let sql = `
+        SELECT * FROM apps WHERE id = '${id}';
+        `
+        return db.execute(sql)
+    }
+
+
 }
 
 export default User;
