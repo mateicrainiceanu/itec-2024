@@ -44,6 +44,16 @@ class Bug {
         let sql = `SELECT * FROM bugs WHERE userId = ${id} AND status=0;`;
         return db.execute(sql)
     }
+
+    static getForId(id: number) {
+        let sql = `SELECT * FROM bugs WHERE id = ${id};`
+        return db.execute(sql)
+    }
+    static del(id: number) {
+        let sql = `DELETE FROM bugs WHERE id = ${id};`
+        return db.execute(sql)
+    }
+    
 }
 
 export default Bug

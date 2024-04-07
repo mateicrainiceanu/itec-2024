@@ -9,15 +9,19 @@ function DevBugs() {
 
     const [bugs, setBugs] = useState([])
 
+	const [show, setShow] = useState(false)
+
     useEffect(()=> {
         axios.get("/api/user/bugs").then(response => {
-            setBugs(response.data)
+            setBugs(response.data)	
+			setShow(response.data.length !== 0)
+					
         }).catch(err => {alert("Error")})
     }, [])
 
 	return (
 		<div>
-			<div className="my-2">
+			{show && <div className="my-2">
 				<div className="w-full text-center">
 					<h2 className="text-xl font-mono bold">! BUGS !</h2>
 					<p>Users have reported the following problems with your apps...</p>
@@ -39,7 +43,7 @@ function DevBugs() {
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</div>}
 		</div>
 	);
 }
